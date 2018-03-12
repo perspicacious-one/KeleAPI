@@ -1,25 +1,33 @@
-require "kele/version"
 require "httparty"
 
 module Kele
-  class User
+
+  class Session
     include HTTParty
-    @url = "https://www.bloc.io/api/v1"
+    attr_accessor :token, :uri, :response
 
     def initialize(email, pass)
       begin
-        @options = {
+        @uri = "https://www.bloc.io/api/v1/sessions"
+        @values = {
           body: {
-            user: {
-              email: email,
-              password: pass
-            }
+                email: email,
+                password: pass
           }
         }
-        @token = HTTParty.post(@url, @options)
+
+
+        @token = self.class.post(@uri, @values)
       rescue => e
         p e.message
       end
+      p Module.nesting
     end
+
+    private
+
   end
+
 end
+
+# Kele::Session.new("nelsondcraig@gmail.com", "%7sCAqjH9c6a8ysB")
