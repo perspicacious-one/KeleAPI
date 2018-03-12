@@ -1,25 +1,23 @@
-require "kele/version"
 require "httparty"
 
-module Kele
-  class User
-    include HTTParty
-    @url = "https://www.bloc.io/api/v1"
+class Kele
 
-    def initialize(email, pass)
-      begin
-        @options = {
-          body: {
-            user: {
+  include HTTParty
+  attr_accessor :auth_token, :uri, :response
+
+  def initialize(email, pass)
+    begin
+      @uri = "https://www.bloc.io/api/v1/sessions"
+      @values = {
+        body: {
               email: email,
               password: pass
-            }
-          }
         }
-        @token = HTTParty.post(@url, @options)
-      rescue => e
-        p e.message
-      end
+      }
+      @response = self.class.post(@uri, @values)
+      @auth_token = @response["auth_token"]
+    rescue => e
+      p e.message
     end
   end
 end
