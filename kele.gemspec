@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.summary     = "Kele API Client."
   s.description = "A client for the Bloc API"
   s.add_runtime_dependency 'httparty', '~> 0.13'
-  s.files         = ['lib/kele.rb', 'lib/kele/version.rb']
+  s.files         = ['lib/kele.rb', 'lib/kele/session.rb', 'lib/kele/user.rb', 'lib/kele/mentor.rb', 'lib/kele/version.rb']
   s.require_paths = ["lib"]
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
@@ -22,3 +22,4 @@ Gem::Specification.new do |s|
   end
 
 end
+#
