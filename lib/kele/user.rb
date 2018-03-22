@@ -7,16 +7,16 @@ module User
   extend self
   include HTTParty
 
-  attr_reader :user, :mentor_id, :threads, :thread_response
+  attr_reader :user, :mentor_id
 
   def load
     if Session.open_status
       @user = self.get("https://www.bloc.io/api/v1/users/me", headers: { "authorization" => Session.get_token })
-      if Helper.check_code(@user.parsed_response[:code])
-        load_threads
-      else
-        Helper.custom_parse(@user)
-      end
+      # if Helper.check_code(@user.parsed_response[:code])
+      #   load_threads
+      # else
+      #   Helper.custom_parse(@user)
+      # end
     end
   end
 
@@ -31,15 +31,19 @@ module User
   end
 
   def get_roadmap
-    arr = ["current_enrollment", "chain_id"]
+    arr = ["current_enrollment", "id"]
     id = get_key_value(arr)
     Roadmap.get(id)
   end
 
-  def get_checkpoints
+  def get_checkpoint(id)
+    Roadmap.checkpoints(id)
+  end
+
+  def get_remaining_checkpoints
     arr = ["current_enrollment", "chain_id"]
     id = get_key_value(arr)
-    Roadmap.checkpoints(id)
+    Roadmap.remaining_checkpoints(id)
   end
 
   def load_threads(page)
@@ -80,7 +84,7 @@ module User
       if @user
         resource = @user
         array.each do |key|
-          resource = resource[key]
+          resource[key] != nil ? resource = resource[key] : p "terminated key-value find early. Could not find #{key}." break
         end
         resource
       else

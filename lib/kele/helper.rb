@@ -20,9 +20,9 @@ module Helper
     end
   end
 
-  def check_code(code)
+  def check_code(response)
     begin
-      case code
+      case response["code"]
       when 200
         p "200 Success"
         true
@@ -36,7 +36,7 @@ module Helper
         p "403 Forbidden" + "\n" + "The requested operation is not permitted for the user."
         false
       else
-        p code.to_s + "\n" + "Unknown error."
+        p response["code"] + "\n" + "Unknown error."
         false
       end
     rescue => e
@@ -44,21 +44,4 @@ module Helper
     end
   end
 
-  def api_post(uri, body = nil, header)
-    if body == nil
-      p "post requires send data"
-    else
-      response = self.post(uri, body, header)
-      result = {code: response.parsed_response.code, body: response.parsed_response.body}
-    end
-  end
-
-  def api_get(uri, body = nil, header)
-    if body == nil
-      response = self.post(uri, header)
-    else
-      response = self.post(uri, body, header)
-    end
-    result = {code: response.parsed_response.code, body: response.parsed_response.body}
-  end
 end
