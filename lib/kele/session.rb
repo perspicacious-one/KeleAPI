@@ -1,3 +1,5 @@
+require_relative "helper"
+require_relative "user"
 
 module Session
   include HTTParty
@@ -40,6 +42,7 @@ module Session
       else
         @auth_token = @response["auth_token"]
         open
+        User.load
       end
     rescue => e
       close

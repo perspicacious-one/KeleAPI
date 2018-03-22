@@ -1,32 +1,25 @@
 require_relative "session"
+require_relative "helper"
 
 module Roadmap
   extend self
   include HTTParty
 
-  def retrieve(id)
+  def get(id)
     @id = id
-    @roadmap = self.get("https://www.bloc.io/api/v1/roadmaps/#{@id}", headers: { "authorization" => Session.get_token })
-    parse_response(@roadmap)
+    p @id
+    @roadmap = self.get("https://www.bloc.io/api/v1/roadmaps/#{@id}", body: {"id" => @id} headers: { "authorization" => Session.get_token })
   end
 
-  def checkpoints(enrollment_id)
-    @id = enrollment_id
-    @checkpoints = self.get("https://www.bloc.io/api/v1/enrollment_chains/#{@id}/checkpoints_remaining_in_section", headers: { "authorization" => Session.get_token })
-    parse_response(@checkpoints)
+  def checkpoint(id)
+    @id = id
+    #@checkpoint_id = checkpoint_id.to_s
+    @checkpoint = self.get("https://www.bloc.io/api/v1/checkpoints/#{@id}",  headers: { "authorization" => Session.get_token })
   end
 
-  def parse_response(response)
-    begin
-      if response.code == 200
-        result = []
-        response.parsed_response.map { |hash| hash.each { |key, value| result.push({key => value}) } }
-        result
-      else
-        p response.code + "\n" + response.parsed_response
-      end
-    rescue => e
-      p e.message
-    end
+  def remaining_checkpoints(id)
+    @id = id
+    #@chain_id = chain_id.to_s
+    @remaining = self.get("https://www.bloc.io/api/v1/enrollment_chains/#{@id}/checkpoints_remaining_in_section", headers: { "authorization" => Session.get_token })
   end
 end
