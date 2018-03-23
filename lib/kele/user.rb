@@ -63,7 +63,7 @@ module User
     end
   end
 
-  def send_message(subject, body, to_id = nil)
+  def send_message(subject, body, token = nil, to_id = nil)
     load_threads if !@threads
 
     if !to_id
@@ -72,9 +72,9 @@ module User
 
     sender = get_key_value(["email"])
 
-    @send_response = self.post("https://www.bloc.io/api/v1/messages", body: {"sender" => sender, "recipient_id" => to_id, "subject" => subject, "stripped-text" => body }, headers: { "authorization" => Session.get_token } )
+    @send_response = self.post("https://www.bloc.io/api/v1/messages", body: {"sender" => sender, "recipient_id" => to_id, "token" => token, "subject" => subject, "stripped-text" => body }, headers: { "authorization" => Session.get_token } )
   end
-
+  
   def get_key_value(array)
     begin
       if @user
